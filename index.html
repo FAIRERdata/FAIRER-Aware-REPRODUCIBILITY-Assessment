@@ -63,7 +63,7 @@
 
         #checklist-score {
             font-size: 24px;
-            /* Adjust the font size as needed */
+            margin: 0 auto;
         }
 
         #logos img {
@@ -129,7 +129,7 @@
                 }
             });
             // Update the total score or perform any other actions with it
-            $("#checklist-score").html("Total Score: " + Math.round((totalScore / 124) * 100) + "%")
+            $("#checklist-score").html("Your Data are " + Math.round((totalScore / 124) * 100) + "% Reproducible")
         }
 
         function write_to_modal(title, contents) {
@@ -1123,7 +1123,7 @@
                 adjustTextareaHeight(this);
             });
         </script>
-        <div id="checklist-score"> Total Score: 0%</div>
+        <div id="checklist-score"> Your Data are 0% Reproducible </div>
         <button class="hvr-fade" id="print-button"
             title="Your results will show up in a pop-up window and you will be able to print them."
             onclick="window.print()"><i class="fa fa-print"></i> Print Results </button>
