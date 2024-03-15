@@ -47,8 +47,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            /* Adjust as needed */
+            height: 10vh;
         }
 
         th {
@@ -66,15 +65,15 @@
 
         #print-button {
             color: #C64CE1;
+            background-color: white;
             font-size: 18px;
-            /* Adjust the font size as needed */
             padding: 10px 20px;
-            /* Adjust padding as needed */
         }
 
         #checklist-score {
-            font-size: 24px;
+            font-size: 36px;
             margin: 0 auto;
+            text-align: center;
         }
 
         #logos img {
@@ -153,6 +152,12 @@
             var contents = document.getElementById(id_prefix + "-contents").innerHTML;
             write_to_modal(title, contents);
             $('#modal').modal('show');
+        }
+
+        function print_page() {
+            document.getElementById("print-button").style.display = "none"
+            window.print();
+            document.getElementById("print-button").style.display = "block"
         }
     </script>
     <div class="container">
@@ -1136,11 +1141,18 @@
                 adjustTextareaHeight(this);
             });
         </script>
+        
         <div id="checklist-score"> Your Data are 0% Reproducible </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <img id="bottom-logo" src="images/logos/FAIRER logo.png" align="center" style="width:40%"/><br><br>
+             </div>
+        </div>
         <div class="button-container">
-            <button class="hvr-fade" id="print-button"
+            <button id="print-button"
                 title="Your results will show up in a pop-up window and you will be able to print them."
-                onclick="window.print()">
+                onclick="print_page()">
                 <i class="fa fa-print"></i> Click Here to Print Results
             </button>
         </div>
