@@ -43,6 +43,14 @@
             margin-left: 1px;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Adjust as needed */
+        }
+
         th {
             color: white;
             background-color: #C64CE1;
@@ -56,9 +64,12 @@
             padding-left: 5px
         }
 
-        button {
+        #print-button {
             color: #C64CE1;
-            border: 0px;
+            font-size: 18px;
+            /* Adjust the font size as needed */
+            padding: 10px 20px;
+            /* Adjust padding as needed */
         }
 
         #checklist-score {
@@ -209,12 +220,14 @@
                     principles to your data assets will help others to find, verify, cite, and reuse your data
                     and code more easily.
                 </p>
-                <p> This tool helps you to assess the reproducibility of a data asset and associated code, and get tips on
+                <p> This tool helps you to assess the reproducibility of a data asset and associated code, and get tips
+                    on
                     how you could increase their value and impact.</p>
                 <p>The tool is discipline-agnostic, making it relevant to any scientific field. </p>
                 <p>
                     The checklist will take 15-30 minutes to complete, after which you will receive a quantitative
-                    summary of the level of reproducibility of your data and code, and tips on how you can improve the level
+                    summary of the level of reproducibility of your data and code, and tips on how you can improve the
+                    level
                     of reproducibility. No information is saved on our servers, but you will be able to save the results
                     of the assessment, including tips for improvement, to your local computer and add notes for future
                     reference.
@@ -1124,9 +1137,13 @@
             });
         </script>
         <div id="checklist-score"> Your Data are 0% Reproducible </div>
-        <button class="hvr-fade" id="print-button"
-            title="Your results will show up in a pop-up window and you will be able to print them."
-            onclick="window.print()"><i class="fa fa-print"></i> Print Results </button>
+        <div class="button-container">
+            <button class="hvr-fade" id="print-button"
+                title="Your results will show up in a pop-up window and you will be able to print them."
+                onclick="window.print()">
+                <i class="fa fa-print"></i> Click Here to Print Results
+            </button>
+        </div>
     </div>
     <!-- ============================================================================================= -->
     <!-- ======================================= Modal window  ======================================= -->
