@@ -122,43 +122,75 @@
     <script>
         /* ----------------------------- update_checklist() ----------------------------- */
         function update_checklist() {
-            let totalScore = 0;
+            // Contradictions
+            // Contradiction: non-deterministic and deterministic
+            const checklist1Yes = document.querySelector('input[name="checklist1"][value="2"]');
+            const checklist2Yes = document.querySelector('input[name="checklist2"][value="2"]');
+            if (checklist1Yes.checked && checklist2Yes.checked) {
+                alert('Your code cannot be both deterministic and non-deterministic.');
+                checklist2Yes.checked = false;
+            }
+            // Contradiction: HPC and quantum computer executable
+            const checklist3Yes = document.querySelector('input[name="checklist3"][value="2"]');
+            const checklist4Yes = document.querySelector('input[name="checklist4"][value="2"]');
+            if (checklist3Yes.checked && checklist4Yes.checked) {
+                alert('Your code cannot be only executable on both HPC and quantum computer.');
+                checklist4Yes.checked = false;
+            }
+            // Contradiction: Documentations
+            const checklist25Yes = document.querySelector('input[name="checklist25"][value="2"]');
+            const checklist26Yes = document.querySelector('input[name="checklist26"][value="2"]');
+            if (checklist25Yes.checked && checklist26Yes.checked) {
+                alert('You cannot answer "Yes" to both: \n\nAll datasets drawn from the existing literature (potentially including authors’ own previously published work) are publicly available.\n\nA detailed explanation, where applicable, as to why datasets used are not publicly available, and why publicly available alternatives were not used.');
+                checklist26Yes.checked = false;
+            }
+            // Contradiction: Deterministic and Setting Seed
+            const checklist38Yes = document.querySelector('input[name="checklist38"][value="2"]');
+            const checklist38No = document.querySelector('input[name="checklist38"][value="0"]');
+            const checklist38Partial = document.querySelector('input[name="checklist38"][value="1"]');
+            if (checklist1Yes.checked && (checklist38Yes.checked || checklist38No.checked || checklist38Partial.checked)) {
+                alert('Since your code is a deterministic algorithm, you should not need to set a seed for reproducibility. (N/A)');
+                checklist38Yes.checked = false;
+                checklist38No.checked = false;
+                checklist38Partial.checked = false;
+            }
+                // Clear and Check for Total Score
+                let totalScore = 0;
+                // Get the checklist division by ID
+                const checklist = document.getElementById("checklist-table");
 
-            // Get the checklist division by ID
-            const checklist = document.getElementById("checklist-table");
+                // Find all radio buttons within the checklist division
+                const radioButtons = checklist.querySelectorAll('input[type="radio"]');
 
-            // Find all radio buttons within the checklist division
-            const radioButtons = checklist.querySelectorAll('input[type="radio"]');
+                // Loop through radio buttons
+                radioButtons.forEach(radioButton => {
+                    // Check if the radio button is checked
+                    if (radioButton.checked) {
+                        // Add the value of the checked radio button to the total score
+                        totalScore += parseInt(radioButton.value);
+                    }
+                });
+                // Update the total score or perform any other actions with it
+                $("#checklist-score").html("Your Data are " + Math.round((totalScore / 120) * 100) + "% Reproducible")
+            }
 
-            // Loop through radio buttons
-            radioButtons.forEach(radioButton => {
-                // Check if the radio button is checked
-                if (radioButton.checked) {
-                    // Add the value of the checked radio button to the total score
-                    totalScore += parseInt(radioButton.value);
-                }
-            });
-            // Update the total score or perform any other actions with it
-            $("#checklist-score").html("Your Data are " + Math.round((totalScore / 124) * 100) + "% Reproducible")
-        }
+            function write_to_modal(title, contents) {
+                $("#modal-title").html(title);
+                $("#modal-body").html(contents);
+            }
 
-        function write_to_modal(title, contents) {
-            $("#modal-title").html(title);
-            $("#modal-body").html(contents);
-        }
+            function show_modal(id_prefix) {
+                var title = document.getElementById(id_prefix + "-title").textContent;
+                var contents = document.getElementById(id_prefix + "-contents").innerHTML;
+                write_to_modal(title, contents);
+                $('#modal').modal('show');
+            }
 
-        function show_modal(id_prefix) {
-            var title = document.getElementById(id_prefix + "-title").textContent;
-            var contents = document.getElementById(id_prefix + "-contents").innerHTML;
-            write_to_modal(title, contents);
-            $('#modal').modal('show');
-        }
-
-        function print_page() {
-            document.getElementById("print-button").style.display = "none"
-            window.print();
-            document.getElementById("print-button").style.display = "block"
-        }
+            function print_page() {
+                document.getElementById("print-button").style.display = "none"
+                window.print();
+                document.getElementById("print-button").style.display = "block"
+            }
     </script>
     <div class="container">
         <!-- Logo -->
@@ -1124,30 +1156,30 @@
         </div>
 
         <script>
-            // Function to adjust the height of the textarea based on content
-            function adjustTextareaHeight(textarea) {
-                textarea.style.height = 'auto'; // Reset the height to auto
-                textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to the scroll height
-            }
+                // Function to adjust the height of the textarea based on content
+                function adjustTextareaHeight(textarea) {
+                    textarea.style.height = 'auto'; // Reset the height to auto
+                    textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to the scroll height
+                }
 
-            // Get the textarea element
-            var textarea = document.getElementById('nq1');
+                // Get the textarea element
+                var textarea = document.getElementById('nq1');
 
-            // Adjust the height initially
-            adjustTextareaHeight(textarea);
+                // Adjust the height initially
+                adjustTextareaHeight(textarea);
 
-            // Attach input event listener to adjust height dynamically
-            textarea.addEventListener('input', function () {
-                adjustTextareaHeight(this);
-            });
+                // Attach input event listener to adjust height dynamically
+                textarea.addEventListener('input', function () {
+                    adjustTextareaHeight(this);
+                });
         </script>
-        
+
         <div id="checklist-score"> Your Data are 0% Reproducible </div>
         <br>
         <div class="row">
             <div class="col-md-12" align="center">
-                <img id="bottom-logo" src="images/logos/FAIRER logo.png" align="center" style="width:40%"/><br><br>
-             </div>
+                <img id="bottom-logo" src="images/logos/FAIRER logo.png" align="center" style="width:40%" /><br><br>
+            </div>
         </div>
         <div class="button-container">
             <button id="print-button"
