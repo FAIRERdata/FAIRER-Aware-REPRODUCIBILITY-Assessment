@@ -8,4 +8,3 @@ SOURCES (built from and added to):
 
 [MICCAI_2023_Repro_Tuto.pdf (miccai2023-reproducibility-tutorial.github.io)](https://miccai2023-reproducibility-tutorial.github.io/materials/2023.10.08_MICCAI_2023_Repro_Tuto.pdf)
 
-Version: 0.010 (beta)
