@@ -53,14 +53,28 @@
         th {
             color: white;
             background-color: #C64CE1;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            padding-left: 5px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            padding-left: 15px;
             text-align: left;
+            border-radius: 10px;
+            border-bottom: white;
         }
 
-        td {
-            padding-left: 5px
+         td {
+            padding-left: 15px;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border: white;
+            border-bottom: none;
+        }
+
+         label {
+            font-weight: normal;
         }
 
         #print-button {
@@ -275,22 +289,32 @@
                         onclick="show_modal('citation')"> Author statement <i class="fa fa-long-arrow-left"></i></a>
                 </p>
             </div>
-
             <br>
-        </div>
-        <div class="pagebreak"></div>
+            <div id="intro-box">
+                <br>
+                <p>
+<b>REPRODUCIBILITY:</b> </p>
+<p>Reproducible data and code means that the final data and code are computationally reproducible within some
+tolerance interval or defined limits of precision and accuracy, i.e. a 3rd party will be able to verify the
+data lineage and processing, reanalyze the data and obtain consistent computational results using the same
+input raw data, computational steps, methods, computer code, and conditions of analysis in order to
+determine if the same result emerges from the reprocessing and reanalysis. “Same result” can mean different
+things in different contexts: identical measures in a fully deterministic context, the same numeric results
+but differing in some irrelevant detail, statistically similar results in a non-deterministic context, or
+validation of a hypothesis. All data and code are made available for 3rd-party verification of
+reproducibility. Note that reproducibility is a different concept from replicability. In the latter case,
+the final published data are linked to sufficiently detailed methods and information for a 3rd-party to be
+able to verify the results based on the independent collection of new raw data using similar or different
+methods but leading to comparable results.
+</p>
+            </div>
+
 
         <h3 align=left>Checklist Questions <i class="far fa-eye" aria-hidden="true"></i><i class="far fa-eye"
                 aria-hidden="true"></i></h3>
 
         <table border="1" id="checklist-table">
-            <thead>
-                <tr>
-                    <th colspan="2" style="background-color: white; color: black; font-weight: normal;"><b>REPRODUCIBILITY:</b> <br>
-                        Reproducible data and code means that the final data and code are computationally reproducible within some tolerance interval or defined limits of precision and accuracy, i.e. a 3rd party will be able to verify the data lineage and processing, reanalyze the data and obtain consistent computational results using the same input raw data, computational steps, methods, computer code, and conditions of analysis in order to determine if the same result emerges from the reprocessing and reanalysis. “Same result” can mean different things in different contexts: identical measures in a fully deterministic context, the same numeric results but differing in some irrelevant detail, statistically similar results in a non-deterministic context, or validation of a hypothesis. All data and code are made available for 3rd-party verification of reproducibility. Note that reproducibility is a different concept from replicability. In the latter case, the final published data are linked to sufficiently detailed methods and information for a 3rd-party to be able to verify the results based on the independent collection of new raw data using similar or different methods but leading to comparable results.</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
+            <thead></thead>
             <thead>
                 <tr>
                     <th colspan="2">My code is:</th>
@@ -304,9 +328,11 @@
                         executions with the same input. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist1" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist1" value="0" onclick="update_checklist()">No
+                        <label>
+                            <input type="radio" name="checklist1" value="2" onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                        <label><input type="radio" name="checklist1" value="0" onclick="update_checklist()">&nbsp; No
+</label>
                     </td>
                 </tr>
                 <tr>
@@ -318,9 +344,12 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist2" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist2" value="0" onclick="update_checklist()">No
+                        <label>
+<input type="radio" name="checklist2" value="2" onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                        <label>
+                        <input type="radio" name="checklist2" value="0" onclick="update_checklist()">&nbsp; No
+                        </label>
                     </td>
                 </tr>
                 <tr>
@@ -329,9 +358,9 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist3" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist3" value="0" onclick="update_checklist()">No
+                        <label><input type="radio" name="checklist3" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist3" value="0" onclick="update_checklist()">&nbsp; No</label>
                     </td>
                 </tr>
                 <tr>
@@ -343,9 +372,9 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist4" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist4" value="0" onclick="update_checklist()">No
+                        <label><input type="radio" name="checklist4" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist4" value="0" onclick="update_checklist()">&nbsp; No</label>
                     </td>
                 </tr>
             </tbody>
@@ -359,11 +388,19 @@
                     <td class="col1">A clear description of the mathematical setting, algorithm, and/or model. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist5" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist5" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist5" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist5" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist5" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label>
+<input type="radio" name="checklist5" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;
+                        </label>
+                        <label>
+                        <input type="radio" name="checklist5" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;
+
+                        </label>
+                        <label>
+                        <input type="radio" name="checklist5" value="2" onclick="update_checklist()">&nbsp; N/A
+
+                        </label>
                     </td>
                 </tr>
                 <tr>
@@ -372,11 +409,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist6" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist6" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist6" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist6" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist6" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                       <label><input type="radio" name="checklist6" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist6" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist6" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -385,11 +422,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist7" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist7" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist7" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist7" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist7" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist7" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist7" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist7" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -398,11 +435,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist8" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist8" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist8" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist8" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist8" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist8" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist8" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist8" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
             </tbody>
@@ -416,11 +453,11 @@
                     <td class="col1">A clear statement of the claim. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist9" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist9" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist9" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist9" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist9" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist9" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist9" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist9" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -429,11 +466,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist10" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist10" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist10" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist10" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist10" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist10" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist10" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist10" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -442,11 +479,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist11" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist11" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist11" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist11" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist11" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist11" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist11" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist11" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -455,11 +492,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist12" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist12" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist12" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist12" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist12" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist12" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist12" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist12" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -468,11 +505,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist13" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist13" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist13" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist13" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist13" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist13" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist13" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist13" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -481,11 +518,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist14" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist14" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist14" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist14" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist14" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist14" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist14" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist14" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -494,11 +531,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist15" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist15" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist15" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist15" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist15" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist15" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist15" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist15" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -507,11 +544,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist16" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist16" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist16" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist16" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist16" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist16" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist16" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist16" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -520,11 +557,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist17" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist17" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist17" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist17" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist17" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist17" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist17" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist17" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
             </tbody>
@@ -538,11 +575,11 @@
                     <td class="col1">A downloadable version of the dataset or simulation environment. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist18" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist18" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist18" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist18" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist18" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist18" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist18" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist18" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -551,11 +588,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist19" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist19" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist19" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist19" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist19" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist19" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist19" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist19" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -564,11 +601,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist20" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist20" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist20" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist20" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist20" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist20" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist20" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist20" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -577,11 +614,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist21" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist21" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist21" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist21" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist21" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist21" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist21" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist21" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -591,11 +628,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist22" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist22" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist22" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist22" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist22" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist22" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist22" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist22" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -604,11 +641,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist23" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist23" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist23" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist23" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist23" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist23" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist23" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist23" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -617,11 +654,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist24" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist24" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist24" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist24" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist24" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist24" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist24" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist24" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -631,11 +668,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist25" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist25" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist25" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist25" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist25" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist25" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist25" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist25" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -645,26 +682,26 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist26" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist26" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist26" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist26" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist26" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist26" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist26" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist26" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
                     <td class="col1">
                         A complete description of the data collection process (e.g., expt’l setup, device(s) used,
                         image acquisition parameters, subjects/objects involved, instructions to annotators, and
-                        qa/qc methods.
+                        qa/qc methods.)
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist27" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist27" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist27" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist27" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist27" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist27" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist27" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist27" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -673,11 +710,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist28" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist28" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist28" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist28" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist28" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist28" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist28" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist28" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
             </tbody>
@@ -691,11 +728,11 @@
                     <td class="col1">The specification of dependencies. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist29" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist29" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist29" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist29" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist29" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist29" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist29" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist29" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -704,11 +741,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist30" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist30" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist30" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist30" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist30" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist30" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist30" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist30" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -717,11 +754,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist31" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist31" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist31" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist31" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist31" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <label> <input type="radio" name="checklist31" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                    <label> <input type="radio" name="checklist31" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist31" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -730,11 +767,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist32" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist32" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist32" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist32" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist32" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist32" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist32" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist32" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -743,11 +780,11 @@
                         produce those results. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist33" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist33" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist33" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist33" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist33" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist33" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                    <label><input type="radio" name="checklist33" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                    <label> <input type="radio" name="checklist33" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -755,11 +792,11 @@
                         Any code required for pre-processing data. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist34" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist34" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist34" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist34" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist34" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <label> <input type="radio" name="checklist34" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                    <label> <input type="radio" name="checklist34" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                    <label> <input type="radio" name="checklist34" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -767,11 +804,11 @@
                         All source code required for conducting and analyzing the experiment(s). </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist35" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist35" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist35" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist35" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist35" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <label> <input type="radio" name="checklist35" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist35" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist35" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -779,11 +816,11 @@
                         A licence that allows free usage of the code for research purposes. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist36" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist36" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist36" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist36" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist36" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist36" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist36" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist36" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -792,11 +829,11 @@
                         paper where each step comes from. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist37" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist37" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist37" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist37" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist37" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist37" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist37" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist37" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -805,11 +842,11 @@
                         sufficient to allow replication of results. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist38" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist38" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist38" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist38" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist38" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist38" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist38" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist38" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -818,11 +855,11 @@
                         GPU/CPU models; memory; OS; names/versions of software libraries and frameworks. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist39" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist39" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist39" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist39" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist39" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist39" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist39" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist39" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -831,11 +868,11 @@
                         choosing these metrics.
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist40" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist40" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist40" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist40" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist40" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist40" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist40" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist40" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -844,11 +881,11 @@
                         </div>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist41" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist41" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist41" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist41" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist41" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist41" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist41" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist41" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -858,11 +895,11 @@
                         distributional information.
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist42" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist42" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist42" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist42" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist42" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist42" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist42" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist42" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -871,11 +908,11 @@
                         using appropriate statistical tests (e.g., Wilcoxon signed-rank).
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist43" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist43" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist43" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist43" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist43" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist43" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist43" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist43" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -884,11 +921,11 @@
                         experiments.
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist44" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist44" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist44" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist44" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist44" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist44" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist44" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist44" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -897,11 +934,11 @@
                         development, along with the criterion used for selecting the final parameter setting.
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist45" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist45" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist45" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist45" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist45" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist45" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist45" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist45" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -910,11 +947,11 @@
                         results
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist46" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist46" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist46" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist46" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist46" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist46" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist46" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist46" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
             </tbody>
@@ -930,11 +967,11 @@
                         results. </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist47" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist47" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist47" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist47" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist47" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist47" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist47" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist47" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -943,11 +980,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist48" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist48" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist48" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist48" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist48" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist48" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist48" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist48" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -956,11 +993,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist49" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist49" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist49" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist49" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist49" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist49" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist49" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist49" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -969,11 +1006,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist50" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist50" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist50" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist50" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist50" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist50" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist50" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist50" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -982,11 +1019,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist51" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist51" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist51" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist51" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist51" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <label> <input type="radio" name="checklist51" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist51" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist51" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -995,11 +1032,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist52" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist52" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist52" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist52" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist52" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist52" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist52" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist52" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1009,11 +1046,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist53" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist53" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist53" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist53" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist53" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist53" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist53" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist53" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1024,11 +1061,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist54" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist54" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist54" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist54" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist54" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist54" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist54" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist54" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1037,11 +1074,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist55" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist55" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist55" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist55" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist55" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist55" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist55" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist55" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1050,11 +1087,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist56" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist56" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist56" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist56" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist56" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist56" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist56" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist56" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1064,11 +1101,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist57" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist57" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist57" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist57" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist57" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist57" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist57" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist57" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1077,11 +1114,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist58" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist58" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist58" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist58" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist58" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist58" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                    <label><input type="radio" name="checklist58" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                    <label> <input type="radio" name="checklist58" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1091,11 +1128,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist59" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist59" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist59" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist59" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist59" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist59" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                    <label> <input type="radio" name="checklist59" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist59" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1104,11 +1141,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist60" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist60" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist60" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist60" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist60" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist60" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist60" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist60" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1117,11 +1154,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist61" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist61" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist61" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist61" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist61" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist61" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist61" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist61" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
                 <tr>
@@ -1130,11 +1167,11 @@
                     </td>
                     <td class="col2">
                         <div></div>
-                        <input type="radio" name="checklist62" value="2"
-                            onclick="update_checklist()">Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="checklist62" value="0" onclick="update_checklist()">No <br>&#10;
-                        <input type="radio" name="checklist62" value="1" onclick="update_checklist()">Partial&nbsp;
-                        <input type="radio" name="checklist62" value="2" onclick="update_checklist()">N/A
+                        <label><input type="radio" name="checklist62" value="2"
+                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label><input type="radio" name="checklist62" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
+                        <label><input type="radio" name="checklist62" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
+                        <label><input type="radio" name="checklist62" value="2" onclick="update_checklist()">&nbsp; N/A</label>
                     </td>
                 </tr>
             </tbody>
@@ -1145,6 +1182,7 @@
         <!-- ========================== -->
         <label for="username"><br>Enter your name (optional for printing):</label>
         <input type="text" id="username">
+        <br><br>
         <div id="comment-box" class="col-md-12">
             <h3>Your Notes <i class="far fa-hand-point-left" aria-hidden="true"></i></h3>
             <div class="row">
