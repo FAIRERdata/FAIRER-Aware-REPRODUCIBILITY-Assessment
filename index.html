@@ -117,6 +117,12 @@
         #comment-box li {
             padding-right: 18px;
         }
+        @media print {
+            @page {
+                size: A4;
+                margin-top: 140px;
+            }
+        }
 
         @media (min-width: 768px) {
             #logos img {
