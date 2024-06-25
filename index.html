@@ -122,6 +122,10 @@
                 size: A4;
                 margin-top: 140px;
             }
+             #modal-print{
+                display: none !important;
+            }
+            
         }
 
         @media (min-width: 768px) {
@@ -141,6 +145,20 @@
 <body>
     <script>
         /* ----------------------------- update_checklist() ----------------------------- */
+         function get_total_questions() {
+                const checklist = document.getElementById("checklist-table");
+                const radioButtons = checklist.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+                
+                let question_set = new Set();
+
+                // Loop through radio buttons
+                radioButtons.forEach(radioButton => {
+                    question_set.add(radioButton.name);
+                });
+                
+                return question_set.size;
+            }
+
         function update_checklist() {
             // Contradictions
             // Contradiction: non-deterministic and deterministic
@@ -190,27 +208,101 @@
                         totalScore += parseInt(radioButton.value);
                     }
                 });
+
+            const total_questions = get_total_questions(); // amount of questions 
+       
+            let total_max = 0;
+            let max = 0;
+            let score_list = [];
+            for (let i = 1; i <= total_questions; i++) {
+                const radio_group = checklist.querySelectorAll(`input[type="radio"][name="checklist${i}"]`);
+                radio_group.forEach(radioButton => {
+                    const value = parseInt(radioButton.value); // get value of the radio button in the group
+                    max = Math.max(max, value); // get the max score out of each radio button group
+                });
+                score_list.push(max) // add the max point choice onto the array
+                max = 0; // reset max
+            };
+
+            // add all points for the grand total, note -4 to account for contradictions
+            total_max = score_list.reduce((a, b) => a + b, 0) - 4; // note total_max is 120 as of ver with 62 questions
+            
                 // Update the total score or perform any other actions with it
-                $("#checklist-score").html("Your Data are " + Math.round((totalScore / 120) * 100) + "% Reproducible")
+                $("#checklist-score").html("Your Data are " + Math.round((totalScore / total_max) * 100) + "% Reproducible")
             }
 
-            function write_to_modal(title, contents) {
-                $("#modal-title").html(title);
-                $("#modal-body").html(contents);
+            function write_to_modal(title, contents, modal_id) {
+                $(modal_id + "-title").html(title);
+                $(modal_id + "-body").html(contents);
             }
 
-            function show_modal(id_prefix) {
+            function show_modal(id_prefix, modal_id) {
                 var title = document.getElementById(id_prefix + "-title").textContent;
                 var contents = document.getElementById(id_prefix + "-contents").innerHTML;
-                write_to_modal(title, contents);
-                $('#modal').modal('show');
+                write_to_modal(title, contents, modal_id);
+                $(modal_id).modal('show');
+                $(document).keydown(function (event) {
+                    if (event.keyCode == 27) {
+                        $(modal_id).modal('hide');
+                    }
+                });
             }
+
+            function validate_answers() {
+                    // Array of group names
+                    const total_questions = get_total_questions(); // get total questions
+                    const checklist = document.getElementById("checklist-table");
+                    let unanswered = []; // initialize array for storing each unanswered question
+
+                    for (let i = 1; i <= total_questions; i++) {
+                        const radio_group = checklist.querySelectorAll(`input[name="checklist${i}"]`);
+                        let question_group_num = Array.from(radio_group).length; // number of choices per radio group
+
+                        radio_group.forEach(radioButton => {
+                            if (radioButton.checked) {
+                                question_group_num -= 1;
+                            }
+                        });
+
+                        // if none of the buttons in the group is checked, the length is the same
+                        if (question_group_num == Array.from(radio_group).length) {
+
+                            // gets the question section (green numbered header)
+                            const question_category = radio_group[0].closest("tbody").previousElementSibling.innerText.trim().replace(":", "");
+                            // gets the specific question in the question section
+                            const question_name = radio_group[0].closest("tr").childNodes[1].textContent.trim();
+
+                            let question_string = "<b>" + question_name + "</b> in section <b>" + question_category + "</b> has not been answered";
+                            unanswered.push(question_string); // add the unanswered question onto the array
+                        }
+                    };
+
+                    var modalContent = document.getElementById('unanswered-questions-contents');
+                    // fill modal contents using the array 
+                    var new_content = "<p>The following questions are unanswered. If you would still like to print, please press the print button at the bottom of this message.</p><ul>";
+                    for (let i = 0; i < unanswered.length; i++) {
+                        new_content += "<li>" + unanswered[i] + "</li>";
+                    }
+                    new_content += "</ul>";
+                    modalContent.innerHTML = new_content;
+
+                    // if array is empty then all questions are answered so directly print
+                    if (!Array.isArray(unanswered) || !unanswered.length) {
+                        print_page();
+                    }
+                    // brings up modal popup window
+                    else {
+                        show_modal('unanswered-questions', '#modal-print');
+                    }
+                }
+
 
             function print_page() {
                 document.getElementById("print-button").style.display = "none"
                 window.print();
                 document.getElementById("print-button").style.display = "block"
             }
+
     </script>
     <div class="container">
         <!-- Logo -->
@@ -257,7 +349,7 @@
             <div id="intro-box">
                 <br>
                 <p>
-                    Do you work with<a data-toggle="modal" onclick="show_modal('datadef')"> data<i
+                    Do you work with<a data-toggle="modal" onclick="show_modal('datadef', '#modal')"> data<i
                             class="fa fa-long-arrow-left"></i></a>? Are you looking to make it future proof? The
                     <b>FAIRER data principles</b> will help you!
                 </p>
@@ -292,7 +384,7 @@
                 <p>Version 0.1.0 alpha (2024-03-15)</p>
                 <p> <a href="https://www.niso.org/press-releases/contributor-roles-taxonomy-credit-formalized-ansiniso-standard"
                         target="_blank">CRediT </a><i class="fa fa-external-link"></i></a><a data-toggle="modal"
-                        onclick="show_modal('citation')"> Author statement <i class="fa fa-long-arrow-left"></i></a>
+                        onclick="show_modal('citation', '#modal')"> Author statement <i class="fa fa-long-arrow-left"></i></a>
                 </p>
             </div>
             <br>
@@ -1235,7 +1327,7 @@ methods but leading to comparable results.
         <div class="button-container">
             <button id="print-button"
                 title="Your results will show up in a pop-up window and you will be able to print them."
-                onclick="print_page()">
+                onclick="validate_answers()">
                 <i class="fa fa-print"></i> Click Here to Print Results
             </button>
         </div>
@@ -1255,6 +1347,27 @@ methods but leading to comparable results.
                 <div class="modal-body" id="modal-body">
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-print" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+    
+                    <h4 class="modal-title" id="modal-print-title">
+                    </h4>
+                </div>
+                <div class="modal-body" id="modal-print-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="print_page()">
+                        <span class="glyphicon glyphicon-print"></span> Print
+                    </button>
                     <button type="button" class="btn" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -1389,6 +1502,14 @@ methods but leading to comparable results.
                 </p> 
             </div>
         </div>
+
+        <div id="unanswered-questions">
+            <div id="unanswered-questions-title"> Unanswered Questions</div>
+            <div id="unanswered-questions-contents">
+        
+            </div>
+        </div>
+
     </div>
 </body>
 
