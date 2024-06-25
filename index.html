@@ -61,7 +61,7 @@
             border-bottom: white;
         }
 
-         td {
+        td {
             padding-left: 15px;
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
@@ -73,7 +73,7 @@
             border-bottom: none;
         }
 
-         label {
+        label {
             font-weight: normal;
         }
 
@@ -117,15 +117,17 @@
         #comment-box li {
             padding-right: 18px;
         }
+
         @media print {
             @page {
                 size: A4;
                 margin-top: 140px;
             }
-             #modal-print{
+
+            #modal-print {
                 display: none !important;
             }
-            
+
         }
 
         @media (min-width: 768px) {
@@ -145,19 +147,19 @@
 <body>
     <script>
         /* ----------------------------- update_checklist() ----------------------------- */
-         function get_total_questions() {
-                const checklist = document.getElementById("checklist-table");
-                const radioButtons = checklist.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-                
-                let question_set = new Set();
+        function get_total_questions() {
+            const checklist = document.getElementById("checklist-table");
+            const radioButtons = checklist.querySelectorAll('input[type="radio"], input[type="checkbox"]');
 
-                // Loop through radio buttons
-                radioButtons.forEach(radioButton => {
-                    question_set.add(radioButton.name);
-                });
-                
-                return question_set.size;
-            }
+            let question_set = new Set();
+
+            // Loop through radio buttons
+            radioButtons.forEach(radioButton => {
+                question_set.add(radioButton.name);
+            });
+
+            return question_set.size;
+        }
 
         function update_checklist() {
             // Contradictions
@@ -192,25 +194,25 @@
                 checklist38No.checked = false;
                 checklist38Partial.checked = false;
             }
-                // Clear and Check for Total Score
-                let totalScore = 0;
-                // Get the checklist division by ID
-                const checklist = document.getElementById("checklist-table");
+            // Clear and Check for Total Score
+            let totalScore = 0;
+            // Get the checklist division by ID
+            const checklist = document.getElementById("checklist-table");
 
-                // Find all radio buttons within the checklist division
-                const radioButtons = checklist.querySelectorAll('input[type="radio"]');
+            // Find all radio buttons within the checklist division
+            const radioButtons = checklist.querySelectorAll('input[type="radio"]');
 
-                // Loop through radio buttons
-                radioButtons.forEach(radioButton => {
-                    // Check if the radio button is checked
-                    if (radioButton.checked) {
-                        // Add the value of the checked radio button to the total score
-                        totalScore += parseInt(radioButton.value);
-                    }
-                });
+            // Loop through radio buttons
+            radioButtons.forEach(radioButton => {
+                // Check if the radio button is checked
+                if (radioButton.checked) {
+                    // Add the value of the checked radio button to the total score
+                    totalScore += parseInt(radioButton.value);
+                }
+            });
 
             const total_questions = get_total_questions(); // amount of questions 
-       
+
             let total_max = 0;
             let max = 0;
             let score_list = [];
@@ -226,82 +228,82 @@
 
             // add all points for the grand total, note -4 to account for contradictions
             total_max = score_list.reduce((a, b) => a + b, 0) - 4; // note total_max is 120 as of ver with 62 questions
-            
-                // Update the total score or perform any other actions with it
-                $("#checklist-score").html("Your Data are " + Math.round((totalScore / total_max) * 100) + "% Reproducible")
-            }
 
-            function write_to_modal(title, contents, modal_id) {
-                $(modal_id + "-title").html(title);
-                $(modal_id + "-body").html(contents);
-            }
+            // Update the total score or perform any other actions with it
+            $("#checklist-score").html("Your Data are " + Math.round((totalScore / total_max) * 100) + "% Reproducible")
+        }
 
-            function show_modal(id_prefix, modal_id) {
-                var title = document.getElementById(id_prefix + "-title").textContent;
-                var contents = document.getElementById(id_prefix + "-contents").innerHTML;
-                write_to_modal(title, contents, modal_id);
-                $(modal_id).modal('show');
-                $(document).keydown(function (event) {
-                    if (event.keyCode == 27) {
-                        $(modal_id).modal('hide');
+        function write_to_modal(title, contents, modal_id) {
+            $(modal_id + "-title").html(title);
+            $(modal_id + "-body").html(contents);
+        }
+
+        function show_modal(id_prefix, modal_id) {
+            var title = document.getElementById(id_prefix + "-title").textContent;
+            var contents = document.getElementById(id_prefix + "-contents").innerHTML;
+            write_to_modal(title, contents, modal_id);
+            $(modal_id).modal('show');
+            $(document).keydown(function (event) {
+                if (event.keyCode == 27) {
+                    $(modal_id).modal('hide');
+                }
+            });
+        }
+
+        function validate_answers() {
+            // Array of group names
+            const total_questions = get_total_questions(); // get total questions
+            const checklist = document.getElementById("checklist-table");
+            let unanswered = []; // initialize array for storing each unanswered question
+
+            for (let i = 1; i <= total_questions; i++) {
+                const radio_group = checklist.querySelectorAll(`input[name="checklist${i}"]`);
+                let question_group_num = Array.from(radio_group).length; // number of choices per radio group
+
+                radio_group.forEach(radioButton => {
+                    if (radioButton.checked) {
+                        question_group_num -= 1;
                     }
                 });
-            }
 
-            function validate_answers() {
-                    // Array of group names
-                    const total_questions = get_total_questions(); // get total questions
-                    const checklist = document.getElementById("checklist-table");
-                    let unanswered = []; // initialize array for storing each unanswered question
+                // if none of the buttons in the group is checked, the length is the same
+                if (question_group_num == Array.from(radio_group).length) {
 
-                    for (let i = 1; i <= total_questions; i++) {
-                        const radio_group = checklist.querySelectorAll(`input[name="checklist${i}"]`);
-                        let question_group_num = Array.from(radio_group).length; // number of choices per radio group
+                    // gets the question section (green numbered header)
+                    const question_category = radio_group[0].closest("tbody").previousElementSibling.innerText.trim().replace(":", "");
+                    // gets the specific question in the question section
+                    const question_name = radio_group[0].closest("tr").childNodes[1].textContent.trim();
 
-                        radio_group.forEach(radioButton => {
-                            if (radioButton.checked) {
-                                question_group_num -= 1;
-                            }
-                        });
-
-                        // if none of the buttons in the group is checked, the length is the same
-                        if (question_group_num == Array.from(radio_group).length) {
-
-                            // gets the question section (green numbered header)
-                            const question_category = radio_group[0].closest("tbody").previousElementSibling.innerText.trim().replace(":", "");
-                            // gets the specific question in the question section
-                            const question_name = radio_group[0].closest("tr").childNodes[1].textContent.trim();
-
-                            let question_string = "<b>" + question_name + "</b> in section <b>" + question_category + "</b> has not been answered";
-                            unanswered.push(question_string); // add the unanswered question onto the array
-                        }
-                    };
-
-                    var modalContent = document.getElementById('unanswered-questions-contents');
-                    // fill modal contents using the array 
-                    var new_content = "<p>The following questions are unanswered. If you would still like to print, please press the print button at the bottom of this message.</p><ul>";
-                    for (let i = 0; i < unanswered.length; i++) {
-                        new_content += "<li>" + unanswered[i] + "</li>";
-                    }
-                    new_content += "</ul>";
-                    modalContent.innerHTML = new_content;
-
-                    // if array is empty then all questions are answered so directly print
-                    if (!Array.isArray(unanswered) || !unanswered.length) {
-                        print_page();
-                    }
-                    // brings up modal popup window
-                    else {
-                        show_modal('unanswered-questions', '#modal-print');
-                    }
+                    let question_string = "<b>" + question_name + "</b> in section <b>" + question_category + "</b> has not been answered";
+                    unanswered.push(question_string); // add the unanswered question onto the array
                 }
+            };
 
-
-            function print_page() {
-                document.getElementById("print-button").style.display = "none"
-                window.print();
-                document.getElementById("print-button").style.display = "block"
+            var modalContent = document.getElementById('unanswered-questions-contents');
+            // fill modal contents using the array 
+            var new_content = "<p>The following questions are unanswered. If you would still like to print, please press the print button at the bottom of this message.</p><ul>";
+            for (let i = 0; i < unanswered.length; i++) {
+                new_content += "<li>" + unanswered[i] + "</li>";
             }
+            new_content += "</ul>";
+            modalContent.innerHTML = new_content;
+
+            // if array is empty then all questions are answered so directly print
+            if (!Array.isArray(unanswered) || !unanswered.length) {
+                print_page();
+            }
+            // brings up modal popup window
+            else {
+                show_modal('unanswered-questions', '#modal-print');
+            }
+        }
+
+
+        function print_page() {
+            document.getElementById("print-button").style.display = "none"
+            window.print();
+            document.getElementById("print-button").style.display = "block"
+        }
 
     </script>
     <div class="container">
@@ -384,921 +386,1147 @@
                 <p>Version 0.1.0 alpha (2024-03-15)</p>
                 <p> <a href="https://www.niso.org/press-releases/contributor-roles-taxonomy-credit-formalized-ansiniso-standard"
                         target="_blank">CRediT </a><i class="fa fa-external-link"></i></a><a data-toggle="modal"
-                        onclick="show_modal('citation', '#modal')"> Author statement <i class="fa fa-long-arrow-left"></i></a>
+                        onclick="show_modal('citation', '#modal')"> Author statement <i
+                            class="fa fa-long-arrow-left"></i></a>
                 </p>
             </div>
             <br>
             <div id="intro-box">
                 <br>
                 <p>
-<b>REPRODUCIBILITY:</b> </p>
-<p>Reproducible data and code means that the final data and code are computationally reproducible within some
-tolerance interval or defined limits of precision and accuracy, i.e. a 3rd party will be able to verify the
-data lineage and processing, reanalyze the data and obtain consistent computational results using the same
-input raw data, computational steps, methods, computer code, and conditions of analysis in order to
-determine if the same result emerges from the reprocessing and reanalysis. “Same result” can mean different
-things in different contexts: identical measures in a fully deterministic context, the same numeric results
-but differing in some irrelevant detail, statistically similar results in a non-deterministic context, or
-validation of a hypothesis. All data and code are made available for 3rd-party verification of
-reproducibility. Note that reproducibility is a different concept from replicability. In the latter case,
-the final published data are linked to sufficiently detailed methods and information for a 3rd-party to be
-able to verify the results based on the independent collection of new raw data using similar or different
-methods but leading to comparable results.
-</p>
+                    <b>REPRODUCIBILITY:</b>
+                </p>
+                <p>Reproducible data and code means that the final data and code are computationally reproducible within
+                    some
+                    tolerance interval or defined limits of precision and accuracy, i.e. a 3rd party will be able to
+                    verify the
+                    data lineage and processing, reanalyze the data and obtain consistent computational results using
+                    the same
+                    input raw data, computational steps, methods, computer code, and conditions of analysis in order to
+                    determine if the same result emerges from the reprocessing and reanalysis. “Same result” can mean
+                    different
+                    things in different contexts: identical measures in a fully deterministic context, the same numeric
+                    results
+                    but differing in some irrelevant detail, statistically similar results in a non-deterministic
+                    context, or
+                    validation of a hypothesis. All data and code are made available for 3rd-party verification of
+                    reproducibility. Note that reproducibility is a different concept from replicability. In the latter
+                    case,
+                    the final published data are linked to sufficiently detailed methods and information for a 3rd-party
+                    to be
+                    able to verify the results based on the independent collection of new raw data using similar or
+                    different
+                    methods but leading to comparable results.
+                </p>
             </div>
 
 
-        <h3 align=left>Checklist Questions <i class="far fa-eye" aria-hidden="true"></i><i class="far fa-eye"
-                aria-hidden="true"></i></h3>
+            <h3 align=left>Checklist Questions <i class="far fa-eye" aria-hidden="true"></i><i class="far fa-eye"
+                    aria-hidden="true"></i></h3>
 
-        <table border="1" id="checklist-table">
-            <thead></thead>
-            <thead>
-                <tr>
-                    <th colspan="2">My code is:</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">A <b>DETERMINISTIC</b> algorithm that, given a particular input, always
-                        produces the same output. The behavior of the algorithm is entirely predictable and does not
-                        involve any randomness or decision-making that can lead to different outcomes on different
-                        executions with the same input. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label>
-                            <input type="radio" name="checklist1" value="2" onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </label>
-                        <label><input type="radio" name="checklist1" value="0" onclick="update_checklist()">&nbsp; No
-</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A <b>NON-DETERMINISTIC</b> algorithm that, given the same input, can produce different
-                        outcomes on different executions. The algorithm makes choices that can vary between runs
-                        because it involves randomness or a selection among multiple possibilities without a
-                        specific rule for which option to choose.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label>
-<input type="radio" name="checklist2" value="2" onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </label>
-                        <label>
-                        <input type="radio" name="checklist2" value="0" onclick="update_checklist()">&nbsp; No
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        <b>Executable</b> only on a high performance computing (HPC) system or a super computer.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist3" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist3" value="0" onclick="update_checklist()">&nbsp; No</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        <b>QUANTUM CODE</b>, executable only in a quantum computing environment that uses quantum
-                        bits (qubits) in a system that exhibits quantum mechanical behavior which can represent and
-                        store information in a more complex way than in classical computing that uses bits (switches
-                        represented by 1s and 0s) as the smallest unit of information.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist4" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist4" value="0" onclick="update_checklist()">&nbsp; No</label>
-                    </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th colspan="2">For all models and algorithms, I provided a link to: </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">A clear description of the mathematical setting, algorithm, and/or model. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist5" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label>
-<input type="radio" name="checklist5" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;
-                        </label>
-                        <label>
-                        <input type="radio" name="checklist5" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;
-
-                        </label>
-                        <label>
-                        <input type="radio" name="checklist5" value="2" onclick="update_checklist()">&nbsp; N/A
-
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A clear explanation of any assumptions.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist6" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                       <label><input type="radio" name="checklist6" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist6" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist6" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An analysis of the complexity (time, space, sample size) of the algorithm.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist7" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist7" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist7" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist7" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A conceptual outline and/or pseudocode description.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist8" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist8" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist8" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist8" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th colspan="2">For any theoretical claims, I provided a link to: </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">A clear statement of the claim. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist9" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist9" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist9" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist9" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A complete proof of the claim.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist10" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist10" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist10" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist10" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A clear formal statement of all assumptions.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist11" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist11" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist11" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist11" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A clear formal statement of all restrictions.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist12" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist12" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist12" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist12" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Proofs of all novel claims.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist13" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist13" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist13" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist13" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Proof sketches or intuitions for complex and/or novel results.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist14" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist14" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist14" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist14" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Appropriate citations to theoretical tools used are given.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist15" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist15" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist15" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist15" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An empirical demonstration that all theoretical claims hold.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist16" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist16" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist16" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist16" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        All experimental code used to eliminate or disprove claims.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist17" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist17" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist17" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist17" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th colspan="2">For all datasets used, I provided a link to: </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">A downloadable version of the dataset or simulation environment. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist18" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist18" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist18" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist18" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The relevant statistics (e.g., the number of examples).
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist19" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist19" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist19" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist19" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The details of train / validation / test splits.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist20" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist20" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist20" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist20" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An explanation of any data that were excluded, and all pre-processing steps.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist21" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist21" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist21" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist21" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A complete description of the data collection process for any new data collected, including
-                        instructions to annotators and methods for quality control.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist22" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist22" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist22" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist22" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A motivation statement for why the experiments are conducted on the selected datasets.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist23" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist23" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist23" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist23" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A licence that allows free usage of the datasets for research purposes.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist24" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist24" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist24" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist24" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        All datasets drawn from the existing literature (potentially including authors’ own
-                        previously published work) are publicly available.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist25" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist25" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist25" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist25" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A detailed explanation, where applicable, as to why datasets used are not publicly
-                        available, and why publicly available alternatives were not used.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist26" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist26" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist26" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist26" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A complete description of the data collection process (e.g., expt’l setup, device(s) used,
-                        image acquisition parameters, subjects/objects involved, instructions to annotators, and
-                        qa/qc methods.)
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist27" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist27" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist27" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist27" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Ethics approval.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist28" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist28" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist28" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist28" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th colspan="2">For all code used, I provided a link to: </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">The specification of dependencies. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist29" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist29" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist29" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist29" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The training code.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist30" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist30" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist30" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist30" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The evaluation code.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist31" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <label> <input type="radio" name="checklist31" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                    <label> <input type="radio" name="checklist31" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist31" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The (pre-)trained model(s).
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist32" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist32" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist32" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist32" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A ReadMe file that includes a table of results accompanied by precise command to run to
-                        produce those results. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist33" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist33" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                    <label><input type="radio" name="checklist33" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                    <label> <input type="radio" name="checklist33" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Any code required for pre-processing data. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist34" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <label> <input type="radio" name="checklist34" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                    <label> <input type="radio" name="checklist34" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                    <label> <input type="radio" name="checklist34" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        All source code required for conducting and analyzing the experiment(s). </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist35" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <label> <input type="radio" name="checklist35" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist35" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist35" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A licence that allows free usage of the code for research purposes. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist36" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist36" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist36" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist36" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A document with comments detailing the implementation of new methods, with references to the
-                        paper where each step comes from. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist37" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist37" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist37" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist37" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The method used for setting seeds (if an algorithm depends on randomness) described in a way
-                        sufficient to allow replication of results. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist38" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist38" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist38" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist38" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the computing infrastructure used (hardware and software), including
-                        GPU/CPU models; memory; OS; names/versions of software libraries and frameworks. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist39" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist39" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist39" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist39" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A formal description of evaluation metrics used and and explanation of the motivation for
-                        choosing these metrics.
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist40" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist40" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist40" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist40" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A statement of the number of algorithm runs used to compute each reported result. <div>
+            <table border="1" id="checklist-table">
+                <thead></thead>
+                <thead>
+                    <tr>
+                        <th colspan="2">My code is:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">
+                            <a data-toggle="modal" onclick="show_modal('codeis1', '#modal')">
+                                <span class="pull-left glyphicon glyphicon-info-sign"></span>
+                                &nbsp; Deterministic
+                            </a>
+                        </td>
+                        </td>
+                        <div id="codeis1" style="display:none;">
+                            <div id="codeis1-title">Deterministic</div>
+                            <div id="codeis1-contents">
+                                <p>A <b>DETERMINISTIC</b> algorithm that, given a particular input, always
+                                    produces the same output. The behavior of the algorithm is entirely predictable and
+                                    does not
+                                    involve any randomness or decision-making that can lead to different outcomes on
+                                    different
+                                    executions with the same input.</p>
+                            </div>
                         </div>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist41" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist41" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist41" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist41" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An analysis of experiments that goes beyond single-dimensional summaries of performance
-                        (e.g., average; median) to include measures of variation, confidence, or other
-                        distributional information.
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist42" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist42" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist42" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist42" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the significance of any improvement or decrease in performance, judged
-                        using appropriate statistical tests (e.g., Wilcoxon signed-rank).
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist43" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist43" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist43" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist43" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A list of all final (hyper-)parameters used for each model/algorithm in the for each of the
-                        experiments.
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist44" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist44" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist44" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist44" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A statement of the number and range of values tried per (hyper-) parameter during
-                        development, along with the criterion used for selecting the final parameter setting.
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist45" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist45" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist45" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist45" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A ReadMe file with a table of results accompanied by precise commands to produce those
-                        results
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist46" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist46" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist46" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist46" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th colspan="2">For all reported experimental results, I provided a link to: </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col1">The range of hyper-parameters considered, method to select the best
-                        hyper-parameter configuration, and specification of all hyper-parameters used to generate
-                        results. </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist47" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist47" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist47" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist47" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The exact number of training and evaluation runs.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist48" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist48" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist48" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist48" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A clear definition of the specific measure or statistics used to report results.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist49" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist49" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist49" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist49" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of results with central tendency (e.g. mean) & variation (e.g. error bars).
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist50" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist50" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist50" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist50" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        The average runtime for each result, or estimated energy cost.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist51" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <label> <input type="radio" name="checklist51" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist51" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist51" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the computing infrastructure used.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist52" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist52" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist52" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist52" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A document that clearly delineates statements that are opinions, hypothesis, and speculation
-                        from objective facts and results.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist53" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist53" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist53" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist53" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the range of hyper-parameters considered, method to select the best
-                        hyper-parameter configuration, and specification of all hyper-parameters used to generate
-                        results.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist54" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist54" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist54" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist54" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Information on sensitivity regarding parameter changes.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist55" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist55" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist55" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist55" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        Details on how baseline methods were implemented and tuned.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist56" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist56" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist56" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist56" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A clear definition of the specific evaluation metrics and/or statistics used to report
-                        results.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist57" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist57" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist57" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist57" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of results with central tendency (e.g. mean) and variation (e.g. error bars).
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist58" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist58" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                    <label><input type="radio" name="checklist58" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                    <label> <input type="radio" name="checklist58" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An analysis of statistical significance of reported differences in performance between
-                        methods.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist59" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist59" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                    <label> <input type="radio" name="checklist59" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist59" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the average runtime for each result, or estimated energy cost.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist60" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist60" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist60" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist60" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        A description of the memory footprint.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist61" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist61" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist61" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist61" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col1">
-                        An analysis of situations in which the method failed.
-                    </td>
-                    <td class="col2">
-                        <div></div>
-                        <label><input type="radio" name="checklist62" value="2"
-                            onclick="update_checklist()">&nbsp; Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label><input type="radio" name="checklist62" value="0" onclick="update_checklist()">&nbsp; No <br>&#10;</label>
-                        <label><input type="radio" name="checklist62" value="1" onclick="update_checklist()">&nbsp; Partial&nbsp;</label>
-                        <label><input type="radio" name="checklist62" value="2" onclick="update_checklist()">&nbsp; N/A</label>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pagebreak"></div>
-        <!-- ========================== -->
-        <!-- ======== COMMENT  ======== -->
-        <!-- ========================== -->
-        <label for="username"><br>Enter your name (optional for printing):</label>
-        <input type="text" id="username">
-        <br><br>
-        <div id="comment-box" class="col-md-12">
-            <h3>Your Notes <i class="far fa-hand-point-left" aria-hidden="true"></i></h3>
-            <div class="row">
-                <div id="comment-prompt">
-                    <ul>
-                        <li>Add any notes you may have here.
-                            These notes will be included when you print and save your results to
-                            your local computer. No information will be saved to our server.
-                            Feel free to capture any thoughts or insights that you'd like to
-                            remember or revisit later.
-                        </li>
-                    </ul>
-                </div>
-                <textarea class="comment-textarea" id="nq1" rows="4"></textarea>
-            </div>
-        </div>
+                        <td class="col2">
+                            <div></div>
+                            <label>
+                                <input type="radio" name="checklist1" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </label>
+                            <label><input type="radio" name="checklist1" value="0" onclick="update_checklist()">&nbsp;
+                                No
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            <a data-toggle="modal" onclick="show_modal('codeis2', '#modal')">
+                                <span class="pull-left glyphicon glyphicon-info-sign"></span>
+                                &nbsp; Non-Deterministic
+                            </a>
+                        </td>
+                        <div id="codeis2" style="display:none;">
+                            <div id="codeis2-title">Non-Deterministic</div>
+                            <div id="codeis2-contents">
+                                <p>A <b>NON-DETERMINISTIC</b> algorithm that, given the same input, can produce
+                                    different
+                                    outcomes on different executions. The algorithm makes choices that can vary between
+                                    runs
+                                    because it involves randomness or a selection among multiple possibilities without a
+                                    specific rule for which option to choose.</p>
+                            </div>
+                        </div>
+                        <td class="col2">
+                            <div></div>
+                            <label>
+                                <input type="radio" name="checklist2" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </label>
+                            <label>
+                                <input type="radio" name="checklist2" value="0" onclick="update_checklist()">&nbsp; No
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            <b>Executable</b> only on a high performance computing (HPC) system or a super computer.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist3" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist3" value="0" onclick="update_checklist()">&nbsp;
+                                No</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            <a data-toggle="modal" onclick="show_modal('codeis3', '#modal')">
+                                <span class="pull-left glyphicon glyphicon-info-sign"></span>
+                                &nbsp; Quantum Code
+                            </a>
+                        </td>
+                        <div id="codeis3" style="display:none;">
+                            <div id="codeis3-title">Quantum Code</div>
+                            <div id="codeis3-contents">
+                                <p><b>QUANTUM CODE</b>, executable only in a quantum computing environment that uses
+                                    quantum
+                                    bits (qubits) in a system that exhibits quantum mechanical behavior which can
+                                    represent and
+                                    store information in a more complex way than in classical computing that uses bits
+                                    (switches
+                                    represented by 1s and 0s) as the smallest unit of information.</p>
+                            </div>
+                        </div>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist4" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist4" value="0" onclick="update_checklist()">&nbsp;
+                                No</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th colspan="2">For all models and algorithms, I provided a link to: </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">A clear description of the mathematical setting, algorithm, and/or model. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist5" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label>
+                                <input type="radio" name="checklist5" value="0" onclick="update_checklist()">&nbsp; No
+                                <br>&#10;
+                            </label>
+                            <label>
+                                <input type="radio" name="checklist5" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;
 
-        <script>
+                            </label>
+                            <label>
+                                <input type="radio" name="checklist5" value="2" onclick="update_checklist()">&nbsp; N/A
+
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A clear explanation of any assumptions.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist6" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist6" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist6" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist6" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An analysis of the complexity (time, space, sample size) of the algorithm.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist7" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist7" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist7" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist7" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A conceptual outline and/or pseudocode description.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist8" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist8" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist8" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist8" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th colspan="2">For any theoretical claims, I provided a link to: </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">A clear statement of the claim. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist9" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist9" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist9" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist9" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A complete proof of the claim.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist10" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist10" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist10" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist10" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A clear formal statement of all assumptions.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist11" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist11" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist11" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist11" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A clear formal statement of all restrictions.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist12" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist12" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist12" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist12" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Proofs of all novel claims.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist13" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist13" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist13" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist13" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Proof sketches or intuitions for complex and/or novel results.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist14" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist14" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist14" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist14" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Appropriate citations to theoretical tools used are given.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist15" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist15" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist15" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist15" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An empirical demonstration that all theoretical claims hold.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist16" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist16" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist16" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist16" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            All experimental code used to eliminate or disprove claims.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist17" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist17" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist17" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist17" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th colspan="2">For all datasets used, I provided a link to: </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">A downloadable version of the dataset or simulation environment. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist18" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist18" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist18" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist18" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The relevant statistics (e.g., the number of examples).
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist19" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist19" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist19" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist19" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The details of train / validation / test splits.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist20" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist20" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist20" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist20" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An explanation of any data that were excluded, and all pre-processing steps.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist21" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist21" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist21" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist21" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A complete description of the data collection process for any new data collected, including
+                            instructions to annotators and methods for quality control.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist22" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist22" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist22" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist22" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A motivation statement for why the experiments are conducted on the selected datasets.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist23" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist23" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist23" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist23" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A licence that allows free usage of the datasets for research purposes.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist24" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist24" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist24" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist24" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            All datasets drawn from the existing literature (potentially including authors’ own
+                            previously published work) are publicly available.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist25" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist25" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist25" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist25" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A detailed explanation, where applicable, as to why datasets used are not publicly
+                            available, and why publicly available alternatives were not used.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist26" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist26" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist26" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist26" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A complete description of the data collection process (e.g., expt’l setup, device(s) used,
+                            image acquisition parameters, subjects/objects involved, instructions to annotators, and
+                            qa/qc methods.)
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist27" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist27" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist27" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist27" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Ethics approval.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist28" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist28" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist28" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist28" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th colspan="2">For all code used, I provided a link to: </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">The specification of dependencies. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist29" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist29" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist29" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist29" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The training code.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist30" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist30" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist30" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist30" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The evaluation code.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist31" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label> <input type="radio" name="checklist31" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label> <input type="radio" name="checklist31" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist31" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The (pre-)trained model(s).
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist32" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist32" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist32" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist32" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A ReadMe file that includes a table of results accompanied by precise command to run to
+                            produce those results. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist33" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist33" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist33" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label> <input type="radio" name="checklist33" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Any code required for pre-processing data. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist34" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label> <input type="radio" name="checklist34" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label> <input type="radio" name="checklist34" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label> <input type="radio" name="checklist34" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            All source code required for conducting and analyzing the experiment(s). </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist35" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label> <input type="radio" name="checklist35" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist35" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist35" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A licence that allows free usage of the code for research purposes. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist36" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist36" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist36" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist36" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A document with comments detailing the implementation of new methods, with references to the
+                            paper where each step comes from. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist37" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist37" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist37" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist37" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The method used for setting seeds (if an algorithm depends on randomness) described in a way
+                            sufficient to allow replication of results. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist38" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist38" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist38" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist38" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the computing infrastructure used (hardware and software), including
+                            GPU/CPU models; memory; OS; names/versions of software libraries and frameworks. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist39" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist39" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist39" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist39" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A formal description of evaluation metrics used and and explanation of the motivation for
+                            choosing these metrics.
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist40" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist40" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist40" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist40" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A statement of the number of algorithm runs used to compute each reported result. <div>
+                            </div>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist41" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist41" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist41" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist41" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An analysis of experiments that goes beyond single-dimensional summaries of performance
+                            (e.g., average; median) to include measures of variation, confidence, or other
+                            distributional information.
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist42" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist42" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist42" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist42" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the significance of any improvement or decrease in performance, judged
+                            using appropriate statistical tests (e.g., Wilcoxon signed-rank).
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist43" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist43" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist43" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist43" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A list of all final (hyper-)parameters used for each model/algorithm in the for each of the
+                            experiments.
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist44" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist44" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist44" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist44" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A statement of the number and range of values tried per (hyper-) parameter during
+                            development, along with the criterion used for selecting the final parameter setting.
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist45" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist45" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist45" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist45" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A ReadMe file with a table of results accompanied by precise commands to produce those
+                            results
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist46" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist46" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist46" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist46" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th colspan="2">For all reported experimental results, I provided a link to: </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col1">The range of hyper-parameters considered, method to select the best
+                            hyper-parameter configuration, and specification of all hyper-parameters used to generate
+                            results. </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist47" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist47" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist47" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist47" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The exact number of training and evaluation runs.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist48" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist48" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist48" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist48" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A clear definition of the specific measure or statistics used to report results.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist49" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist49" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist49" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist49" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of results with central tendency (e.g. mean) & variation (e.g. error bars).
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist50" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist50" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist50" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist50" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            The average runtime for each result, or estimated energy cost.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist51" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label> <input type="radio" name="checklist51" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist51" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist51" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the computing infrastructure used.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist52" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist52" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist52" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist52" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A document that clearly delineates statements that are opinions, hypothesis, and speculation
+                            from objective facts and results.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist53" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist53" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist53" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist53" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the range of hyper-parameters considered, method to select the best
+                            hyper-parameter configuration, and specification of all hyper-parameters used to generate
+                            results.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist54" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist54" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist54" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist54" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Information on sensitivity regarding parameter changes.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist55" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist55" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist55" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist55" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            Details on how baseline methods were implemented and tuned.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist56" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist56" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist56" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist56" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A clear definition of the specific evaluation metrics and/or statistics used to report
+                            results.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist57" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist57" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist57" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist57" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of results with central tendency (e.g. mean) and variation (e.g. error bars).
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist58" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist58" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist58" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label> <input type="radio" name="checklist58" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An analysis of statistical significance of reported differences in performance between
+                            methods.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist59" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist59" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label> <input type="radio" name="checklist59" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist59" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the average runtime for each result, or estimated energy cost.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist60" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist60" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist60" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist60" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            A description of the memory footprint.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist61" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist61" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist61" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist61" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            An analysis of situations in which the method failed.
+                        </td>
+                        <td class="col2">
+                            <div></div>
+                            <label><input type="radio" name="checklist62" value="2" onclick="update_checklist()">&nbsp;
+                                Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="checklist62" value="0" onclick="update_checklist()">&nbsp;
+                                No <br>&#10;</label>
+                            <label><input type="radio" name="checklist62" value="1" onclick="update_checklist()">&nbsp;
+                                Partial&nbsp;</label>
+                            <label><input type="radio" name="checklist62" value="2" onclick="update_checklist()">&nbsp;
+                                N/A</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagebreak"></div>
+            <!-- ========================== -->
+            <!-- ======== COMMENT  ======== -->
+            <!-- ========================== -->
+            <label for="username"><br>Enter your name (optional for printing):</label>
+            <input type="text" id="username">
+            <br><br>
+            <div id="comment-box" class="col-md-12">
+                <h3>Your Notes <i class="far fa-hand-point-left" aria-hidden="true"></i></h3>
+                <div class="row">
+                    <div id="comment-prompt">
+                        <ul>
+                            <li>Add any notes you may have here.
+                                These notes will be included when you print and save your results to
+                                your local computer. No information will be saved to our server.
+                                Feel free to capture any thoughts or insights that you'd like to
+                                remember or revisit later.
+                            </li>
+                        </ul>
+                    </div>
+                    <textarea class="comment-textarea" id="nq1" rows="4"></textarea>
+                </div>
+            </div>
+
+            <script>
                 // Function to adjust the height of the textarea based on content
                 function adjustTextareaHeight(textarea) {
                     textarea.style.height = 'auto'; // Reset the height to auto
@@ -1315,202 +1543,208 @@ methods but leading to comparable results.
                 textarea.addEventListener('input', function () {
                     adjustTextareaHeight(this);
                 });
-        </script>
+            </script>
 
-        <div id="checklist-score"> Your Data are 0% Reproducible </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12" align="center">
-                <img id="bottom-logo" src="images/logos/FAIRER logo.png" align="center" style="width:40%" /><br><br>
-            </div>
-        </div>
-        <div class="button-container">
-            <button id="print-button"
-                title="Your results will show up in a pop-up window and you will be able to print them."
-                onclick="validate_answers()">
-                <i class="fa fa-print"></i> Click Here to Print Results
-            </button>
-        </div>
-    </div>
-    <!-- ============================================================================================= -->
-    <!-- ======================================= Modal window  ======================================= -->
-    <!-- ============================================================================================= -->
-
-    <div id="modal" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h4 class="modal-title" id="modal-title">
-                    </h4>
-                </div>
-                <div class="modal-body" id="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <div id="checklist-score"> Your Data are 0% Reproducible </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12" align="center">
+                    <img id="bottom-logo" src="images/logos/FAIRER logo.png" align="center" style="width:40%" /><br><br>
                 </div>
             </div>
+            <div class="button-container">
+                <button id="print-button"
+                    title="Your results will show up in a pop-up window and you will be able to print them."
+                    onclick="validate_answers()">
+                    <i class="fa fa-print"></i> Click Here to Print Results
+                </button>
+            </div>
         </div>
-    </div>
+        <!-- ============================================================================================= -->
+        <!-- ======================================= Modal window  ======================================= -->
+        <!-- ============================================================================================= -->
 
-    <div id="modal-print" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-    
-                    <h4 class="modal-title" id="modal-print-title">
-                    </h4>
-                </div>
-                <div class="modal-body" id="modal-print-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" onclick="print_page()">
-                        <span class="glyphicon glyphicon-print"></span> Print
-                    </button>
-                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+        <div id="modal" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title" id="modal-title">
+                        </h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ====================================================================================== -->
-    <!-- ======================================= TEXTS  ======================================= -->
-    <!-- ====================================================================================== -->
+        <div id="modal-print" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
 
-    <div id="texts" style="display: none;">
-
-        <!-- ======================================= Appendix  ======================================= -->
-
-        <div id="datadef">
-            <div id="datadef-title">Data - Definition and Context</div>
-            <div id="datadef-contents">
-                <p><b>SOURCE</b>: <a
-                        href="https://ecollab.ncr.int.ec.gc.ca/org/1188635/STB%20%20IMIT%20committee/Branch%20Data%20Agenda/STB%20Scientific%20and%20regulatory%20data%20strategy%20and%20action%20plan.docx?d=w15e791dce7424caa8b2f852e9383b23e"
-                        target="_blank">ECCC Science & Technology Branch, Scientific and regulatory data strategy and
-                        action plan (Draft)<i class="fa fa-external-link"></i></a>. </p>
-                <p><b>DATA</b> are a set of values of subjects with respect to qualitative or quantitative variables
-                    representing facts, statistics, or items of information in a formalized manner suitable for
-                    communication, reinterpretation, or processing (<a
-                        href="https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32603" target="_blank">TBS Policy on
-                        Service and Digital, 2019<i class="fa fa-external-link"></i></a>). </p>
-                <p>Data are facts, measurements, recordings, records, or observations about the world collected by
-                    scientists and others with a minimum of contextual interpretation. Data may be in any format or
-                    medium taking the form of writings, notes, numbers, symbols, text, images, films, video, sound
-                    recordings, pictorial reproductions, drawings, designs or other graphical representations,
-                    procedural manuals, forms, diagrams, work flow charts, equipment descriptions, data files, data
-                    processing algorithms/code/scripts, or statistical records (<a
-                        href="https://codata.org/initiatives/data-science-and-stewardship/rdm-terminology-wg/rdm-terminology/"
-                        target="_blank">CODATA-IRiDiuM (2018)  -International Research Data Management glossary<i
-                            class="fa fa-external-link"></i></a>). </p>
-                <p>
-                    The word “data” may be used very broadly to comprise data (in the strict sense) and the ecosystem of
-                    digital things that relate to data, including metadata, software and algorithms, as well as physical
-                    samples and analogue artefacts - and the digital representations and metadata relating to these
-                    things. (<a
-                        href="http://www.codata.org/events/science-and-policy-workshops/codata-and-codata-china-high-level-international-meeting-on-open-research-data-policy-and-practice/the-beijing-declaration-on-research-data"
-                        target="_blank">CODATA 2019 - Beijing Declaration on Research Data<i
-                            class="fa fa-external-link"></i></a>). There are dozens of other definitions of data that
-                    may be useful depending on the context<sup>1</sup>.
-                </p>
-                <p>
-                    <b>SCIENTIFIC DATA</b> are data that are used by scientists as primary sources to support technical
-                    and regulatory development or scientific enquiry, research, or scholarship, and that are used as
-                    evidence in the scientific process and/or are commonly accepted in the scientific community as
-                    necessary to validate scientific findings and results. All other digital and non-digital content
-                    have the potential of becoming research data. Examples of scientific data include data arising from:
-                    experiments, research and development, ‘citizen science’, surveys, operations, surveillance,
-                    monitoring, field analyzers or data-loggers, instruments, laboratory analyses, inventories, modeling
-                    and simulation output, processed data, and repurposed data (<a
-                        href="https://codata.org/initiatives/data-science-and-stewardship/rdm-terminology-wg/rdm-terminology/"
-                        target="_blank">IRiDiuM - International Research Data Management glossary<i
-                            class="fa fa-external-link"></i></a>). The scientific nature of the data is demonstrated
-                    when the process of creating, maintaining and quality-proofing the data comply with commonly
-                    recognized scientific standards.
-                </p>
-                <p>
-                    Although scientific data share many aspects in common with other types of data (e.g., administrative
-                    data, financial data, business data), their processing frequently requires more complex software and
-                    infrastructure. The data themselves may also be:
-                </p>
-                <ul>
-                    <li>
-                        more complex (e.g., associated accuracy, precision, detection limits, confidence intervals,
-                        quality assurance/quality control procedures, etc.);
-                    </li>
-                    <li>
-                        more tightly controlled;
-                    </li>
-                    <li>
-                        held to higher standards;
-                    </li>
-                    <li>
-                        retained for a longer period of time, often indefinitely;
-                    </li>
-                    <li>
-                        documented more carefully and in greater detail (e.g., description of methods used to obtain
-                        measurements);
-                    </li>
-                    <li>
-                        used as evidence, including in court, and therefore require a higher level of credibility,
-                        reliability, and accessibility.
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-        <div id="citation">
-            <div id="citation-title">Author Statement</div>
-            <div id="citation-contents">
-                <p style="margin-left: 25px;">
-                    <a href="https://orcid.org/0009-0008-2060-8204">Esther Liu <img alt="ORCID logo"
-                            src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
-                            height="16" /></a> (Data curation, Software, Visualization) ; <br>
-                    <a href="https://orcid.org/0000-0002-7349-6970">Dominique Charles <img alt="ORCID logo"
-                            src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
-                            height="16" /></a> (Data curation, Validation) ; and,<br>
-                    <a href="https://orcid.org/0000-0001-9138-5986">Claire C. Austin <img alt="ORCID logo"
-                            src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
-                            height="16" /></a> (Conceptualization, Supervision, Writing).<br>
-                </p>
-                <p style="margin-left: 25px;">All authors reviewed, discussed, and agreed to all aspects of the final
-                    work.</p>
-                <p style="margin-left: 25px;">
-                    All views and opinions expressed are those of the co-authors, and do not necessarily reflect the
-                    official policy or position of their respective employers, or of any government, agency or
-                    organization.
-                </p>
-                <p>
-                    Cite as: Liu E, Charles D, and Austin CC (2024). FAIRER Aware Reproducibility Checklist.
-                </p>
-                <p>
-                    SOURCES (built upon and added to): <br>
-                    <a
-                        href="https://aaai.org/conference/aaai/aaai-23/reproducibility-checklist/"
-                        target="_blank">Reproducibility Checklist – Association for the Advancement of Artificial Intelligence<i
-                            class="fa fa-external-link"></i></a>
-                    <br>
-                    <a
-                        href="https://cs.uwaterloo.ca/~brecht/courses/Perf-Eval-Shared/readings/f20/AI-reproducibility-2020.pdf"
-                        target="_blank">AI-reproducibility-2020.pdf (McGill University and University of Waterloo)<i
-                            class="fa fa-external-link"></i></a>
-                    <br>
-                    <a
-                        href="https://miccai2023-reproducibility-tutorial.github.io/materials/2023.10.08_MICCAI_2023_Repro_Tuto.pdf"
-                        target="_blank">MICCAI_2023_Repro_Tuto.pdf<i
-                            class="fa fa-external-link"></i></a>
-                </p> 
+                        <h4 class="modal-title" id="modal-print-title">
+                        </h4>
+                    </div>
+                    <div class="modal-body" id="modal-print-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" onclick="print_page()">
+                            <span class="glyphicon glyphicon-print"></span> Print
+                        </button>
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="unanswered-questions">
-            <div id="unanswered-questions-title"> Unanswered Questions</div>
-            <div id="unanswered-questions-contents">
-        
-            </div>
-        </div>
+        <!-- ====================================================================================== -->
+        <!-- ======================================= TEXTS  ======================================= -->
+        <!-- ====================================================================================== -->
 
-    </div>
+        <div id="texts" style="display: none;">
+
+            <!-- ======================================= Appendix  ======================================= -->
+
+            <div id="datadef">
+                <div id="datadef-title">Data - Definition and Context</div>
+                <div id="datadef-contents">
+                    <p><b>SOURCE</b>: <a
+                            href="https://ecollab.ncr.int.ec.gc.ca/org/1188635/STB%20%20IMIT%20committee/Branch%20Data%20Agenda/STB%20Scientific%20and%20regulatory%20data%20strategy%20and%20action%20plan.docx?d=w15e791dce7424caa8b2f852e9383b23e"
+                            target="_blank">ECCC Science & Technology Branch, Scientific and regulatory data strategy
+                            and
+                            action plan (Draft)<i class="fa fa-external-link"></i></a>. </p>
+                    <p><b>DATA</b> are a set of values of subjects with respect to qualitative or quantitative variables
+                        representing facts, statistics, or items of information in a formalized manner suitable for
+                        communication, reinterpretation, or processing (<a
+                            href="https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32603" target="_blank">TBS Policy on
+                            Service and Digital, 2019<i class="fa fa-external-link"></i></a>). </p>
+                    <p>Data are facts, measurements, recordings, records, or observations about the world collected by
+                        scientists and others with a minimum of contextual interpretation. Data may be in any format or
+                        medium taking the form of writings, notes, numbers, symbols, text, images, films, video, sound
+                        recordings, pictorial reproductions, drawings, designs or other graphical representations,
+                        procedural manuals, forms, diagrams, work flow charts, equipment descriptions, data files, data
+                        processing algorithms/code/scripts, or statistical records (<a
+                            href="https://codata.org/initiatives/data-science-and-stewardship/rdm-terminology-wg/rdm-terminology/"
+                            target="_blank">CODATA-IRiDiuM (2018)  -International Research Data Management glossary<i
+                                class="fa fa-external-link"></i></a>). </p>
+                    <p>
+                        The word “data” may be used very broadly to comprise data (in the strict sense) and the
+                        ecosystem of
+                        digital things that relate to data, including metadata, software and algorithms, as well as
+                        physical
+                        samples and analogue artefacts - and the digital representations and metadata relating to these
+                        things. (<a
+                            href="http://www.codata.org/events/science-and-policy-workshops/codata-and-codata-china-high-level-international-meeting-on-open-research-data-policy-and-practice/the-beijing-declaration-on-research-data"
+                            target="_blank">CODATA 2019 - Beijing Declaration on Research Data<i
+                                class="fa fa-external-link"></i></a>). There are dozens of other definitions of data
+                        that
+                        may be useful depending on the context<sup>1</sup>.
+                    </p>
+                    <p>
+                        <b>SCIENTIFIC DATA</b> are data that are used by scientists as primary sources to support
+                        technical
+                        and regulatory development or scientific enquiry, research, or scholarship, and that are used as
+                        evidence in the scientific process and/or are commonly accepted in the scientific community as
+                        necessary to validate scientific findings and results. All other digital and non-digital content
+                        have the potential of becoming research data. Examples of scientific data include data arising
+                        from:
+                        experiments, research and development, ‘citizen science’, surveys, operations, surveillance,
+                        monitoring, field analyzers or data-loggers, instruments, laboratory analyses, inventories,
+                        modeling
+                        and simulation output, processed data, and repurposed data (<a
+                            href="https://codata.org/initiatives/data-science-and-stewardship/rdm-terminology-wg/rdm-terminology/"
+                            target="_blank">IRiDiuM - International Research Data Management glossary<i
+                                class="fa fa-external-link"></i></a>). The scientific nature of the data is demonstrated
+                        when the process of creating, maintaining and quality-proofing the data comply with commonly
+                        recognized scientific standards.
+                    </p>
+                    <p>
+                        Although scientific data share many aspects in common with other types of data (e.g.,
+                        administrative
+                        data, financial data, business data), their processing frequently requires more complex software
+                        and
+                        infrastructure. The data themselves may also be:
+                    </p>
+                    <ul>
+                        <li>
+                            more complex (e.g., associated accuracy, precision, detection limits, confidence intervals,
+                            quality assurance/quality control procedures, etc.);
+                        </li>
+                        <li>
+                            more tightly controlled;
+                        </li>
+                        <li>
+                            held to higher standards;
+                        </li>
+                        <li>
+                            retained for a longer period of time, often indefinitely;
+                        </li>
+                        <li>
+                            documented more carefully and in greater detail (e.g., description of methods used to obtain
+                            measurements);
+                        </li>
+                        <li>
+                            used as evidence, including in court, and therefore require a higher level of credibility,
+                            reliability, and accessibility.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div id="citation">
+                <div id="citation-title">Author Statement</div>
+                <div id="citation-contents">
+                    <p style="margin-left: 25px;">
+                        <a href="https://orcid.org/0009-0008-2060-8204">Esther Liu <img alt="ORCID logo"
+                                src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+                                height="16" /></a> (Data curation, Software, Visualization) ; <br>
+                        <a href="https://orcid.org/0000-0002-7349-6970">Dominique Charles <img alt="ORCID logo"
+                                src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+                                height="16" /></a> (Data curation, Validation) ; and,<br>
+                        <a href="https://orcid.org/0000-0001-9138-5986">Claire C. Austin <img alt="ORCID logo"
+                                src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+                                height="16" /></a> (Conceptualization, Supervision, Writing).<br>
+                    </p>
+                    <p style="margin-left: 25px;">All authors reviewed, discussed, and agreed to all aspects of the
+                        final
+                        work.</p>
+                    <p style="margin-left: 25px;">
+                        All views and opinions expressed are those of the co-authors, and do not necessarily reflect the
+                        official policy or position of their respective employers, or of any government, agency or
+                        organization.
+                    </p>
+                    <p>
+                        Cite as: Liu E, Charles D, and Austin CC (2024). FAIRER Aware Reproducibility Checklist.
+                    </p>
+                    <p>
+                        SOURCES (built upon and added to): <br>
+                        <a href="https://aaai.org/conference/aaai/aaai-23/reproducibility-checklist/"
+                            target="_blank">Reproducibility Checklist – Association for the Advancement of Artificial
+                            Intelligence<i class="fa fa-external-link"></i></a>
+                        <br>
+                        <a href="https://cs.uwaterloo.ca/~brecht/courses/Perf-Eval-Shared/readings/f20/AI-reproducibility-2020.pdf"
+                            target="_blank">AI-reproducibility-2020.pdf (McGill University and University of Waterloo)<i
+                                class="fa fa-external-link"></i></a>
+                        <br>
+                        <a href="https://miccai2023-reproducibility-tutorial.github.io/materials/2023.10.08_MICCAI_2023_Repro_Tuto.pdf"
+                            target="_blank">MICCAI_2023_Repro_Tuto.pdf<i class="fa fa-external-link"></i></a>
+                    </p>
+                </div>
+            </div>
+
+            <div id="unanswered-questions">
+                <div id="unanswered-questions-title"> Unanswered Questions</div>
+                <div id="unanswered-questions-contents">
+
+                </div>
+            </div>
+
+        </div>
 </body>
 
 </html>
