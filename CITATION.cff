@@ -1,6 +1,9 @@
-cff-version: 1.2
+cff-version: 1.2.0
 message: "If you use this tool, please cite it as below."
 authors:
+- family-names: "Liu"
+  given-names: "Esther"
+  orcid: "https://orcid.org/0009-0008-2060-8204"
 - family-names: "Charles"
   given-names: "Dominique"
   orcid: "https://orcid.org/0000-0002-7349-6970"
