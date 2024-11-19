@@ -14,4 +14,6 @@ title: "FAIRER Aware Reproducibility Checklist: Tool"
 version: 1.0
 date-released: 2024-11-13
 url: "https://github.com/FAIRERdata/FAIRER-Aware-REPRODUCIBILITY-Assessment/"
-  
+identifiers:
+  - type: doi
+    value:  10.5281/zenodo.14156654
